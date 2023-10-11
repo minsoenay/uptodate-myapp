@@ -12,6 +12,8 @@ permissions:
   security-events: write
   # Only need to read contents
   contents: read
+  id-token: 'write'
+  issues: 'write' #__This fixed the HttpError: Resource not accessible by integration
 
 jobs:
   scan-scheduled:
