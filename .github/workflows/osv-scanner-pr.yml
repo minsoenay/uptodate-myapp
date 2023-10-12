@@ -3,8 +3,7 @@ name: OSV-Scanner PR scanning reusable
 permissions:
   contents: read
   security-events: write
-  issues: write
-
+ 
 on:
   push:
     branches: [ "master" ]
@@ -12,19 +11,38 @@ on:
     branches: [ "master" ]
 
   workflow_dispatch:
+
+  workflow_call:
+    inputs:
+      scan-args:
+        description: "Custom osv-scanner arguments (See https://google.github.io/osv-scanner/usage/ for options, you cannot set --format or --output)"
+        type: string
+        default: |-
+          -r
+          --skip-git
+          ./
+      results-file-name:
+        description: "File name of the result SARIF file"
+        type: string
+        default: results.sarif
  
 jobs:
   scan-pr:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout target branch"
+        uses: actions/checkout@4 # v4.1.0
+ 
+      - name: "Run scanner on existing code"
         uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable-pr.yml@main"
+        continue-on-error: false
         with:
-          # Only scan the top level go.mod file without recursively scanning directories since
-          # this is pipeline is about releasing the go module and binary
           scan-args: |-
-            --skip-git
-            ./
+            --format=json
+            --output=new-results.json
+            ${{ inputs.scan-args }}
+
     permissions:
       # Require writing security events to upload SARIF file to security tab
       security-events: write
+      issues: write
