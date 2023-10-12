@@ -28,4 +28,4 @@ jobs:
     permissions:
       # Needed to upload the SARIF results to code-scanning dashboard.
       security-events: write
-      contents: read
+      contents: write              # This is required for actions/checkout@v1
