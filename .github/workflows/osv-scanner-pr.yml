@@ -11,9 +11,7 @@ on:
         description: "Custom osv-scanner arguments (See https://google.github.io/osv-scanner/usage/ for options, you cannot set --format or --output)"
         type: string
         default: |-
-          -r
-          --skip-git
-          ./
+          --recursive --skip-git ./
       results-file-name:
         description: "File name of the result SARIF file"
         type: string
@@ -34,8 +32,7 @@ jobs:
         continue-on-error: true
         with:
           scan-args: |-
-            --format=json
-            --output=old-results.json
+            --format=json --output=old-results.json
             ${{ inputs.scan-args }}
       - name: "Checkout current branch"
         run: git checkout $GITHUB_SHA
@@ -43,8 +40,7 @@ jobs:
         uses: google/osv-scanner/actions/scanner@main
         with:
           scan-args: |-
-            --format=json
-            --output=new-results.json
+            --format=json --output=new-results.json
             ${{ inputs.scan-args }}
         continue-on-error: true
       - name: "Run osv-scanner-reporter"
