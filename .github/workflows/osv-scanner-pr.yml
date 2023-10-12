@@ -6,9 +6,7 @@ permissions:
  
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches: [ master ]
 
   workflow_dispatch:
 
@@ -32,7 +30,7 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: "Run scanner on main branch"
-        uses: google/osv-scanner/actions/scanner@main
+        uses: google/osv-scanner/actions/scanner@master
         with:
           scan-args: |-
             --format=json --output=new-results.json
