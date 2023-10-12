@@ -10,9 +10,7 @@ on:
   # 3
   workflow_dispatch:
 
-permissions:
-    contents: read # to fetch code (actions/checkout)
-      
+
 jobs:
 
  
@@ -28,4 +26,5 @@ jobs:
     permissions:
       # Needed to upload the SARIF results to code-scanning dashboard.
       security-events: write
-      contents: write              # This is required for actions/checkout@v1
+      id-token: write              # This is required for requesting the JWT
+      contents: read              # This is required for actions/checkout@v1
