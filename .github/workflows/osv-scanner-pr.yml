@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [ "master" ]
 
-  workflow_call:
+  workflow_dispatch:
     inputs:
       scan-args:
         description: "Custom osv-scanner arguments (See https://google.github.io/osv-scanner/usage/ for options, you cannot set --format or --output)"
