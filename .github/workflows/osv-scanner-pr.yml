@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout target branch"
-        uses: actions/checkout@3 # v3
+      - uses: actions/checkout@v3
  
       - name: "Run scanner on existing code"
         uses: google/osv-scanner/actions/scanner@main
