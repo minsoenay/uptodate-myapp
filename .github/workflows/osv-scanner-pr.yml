@@ -18,7 +18,6 @@ on:
         default: |-
           -r
           --skip-git
-          ./
       results-file-name:
         description: "File name of the result SARIF file"
         type: string
@@ -28,7 +27,7 @@ jobs:
   scan-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+      - uses: actions/checkout@v4 # v4.1.0
         with:
           fetch-depth: 0
           # Do persist credentials, as we need it for the git checkout later
@@ -64,21 +63,21 @@ jobs:
       # format to the repository Actions tab.
       - name: "Upload artifact"
         if: '!cancelled()'
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@v3 # v3.1.3
         with:
           name: SARIF file
           path: ${{ inputs.results-file-name }}
           retention-days: 5
-      # - name: "Upload old scan json results"
-      #   if: '!cancelled()'
-      #   uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
-      #   with:
-      #     name: old-json-results
-      #     path: old-results.json
-      #     retention-days: 5
+      - name: "Upload old scan json results"
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v3 # v3.1.3
+        with:
+          name: old-json-results
+          path: old-results.json
+          retention-days: 5
       - name: "Upload new scan json results"
         if: '!cancelled()'
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@v3 # v3.1.3
         with:
           name: new-json-results
           path: new-results.json
