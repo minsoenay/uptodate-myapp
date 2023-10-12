@@ -1,17 +1,21 @@
-name: OSV-Scanner PR Scan
 
-# Change "main" to your default branch if you use a different name, i.e. "master"
+name: OSV-Scanner Scheduled Scan
+
 on:
-  pull_request:
-    branches: [ "master" ]
-  merge_group:
-    branches: [ "master" ]
+  schedule:
+    - cron: '12 12 * * 1'
+# Change "main" to your default branch if you use a different name, i.e. "master"
+  push:
+    branches: [ main ]
 
   workflow_dispatch:
 
-# Declare default permissions as read only.
-permissions: write
+permissions:
+  # Require writing security events to upload SARIF file to security tab
+  security-events: write
+  # Only need to read contents
+  contents: read
 
 jobs:
-  scan-pr:
-    uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable-pr.yml@main"
+  scan-scheduled:
+    uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable.yml@main"
