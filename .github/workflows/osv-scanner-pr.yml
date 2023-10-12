@@ -33,15 +33,17 @@ jobs:
         continue-on-error: false
         with:
           scan-args: |-
-            --format=json --output=old-results.json
+            --format json old-results.json
+            
       - name: "Checkout current branch"
         run: git checkout $GITHUB_SHA
       - name: "Run scanner on new code"
         uses: google/osv-scanner/actions/scanner@main
         with:
           scan-args: |-
-            --format=json --output=new-results.json
+            --format json new-results.json
         continue-on-error: false
+        
       # - name: "Run osv-scanner-reporter"
       #   uses: google/osv-scanner/actions/reporter@main
       #   with:
