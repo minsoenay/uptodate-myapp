@@ -18,9 +18,7 @@ on:
         description: "Custom osv-scanner arguments (See https://google.github.io/osv-scanner/usage/ for options, you cannot set --format or --output)"
         type: string
         default: |-
-          -r
-          --skip-git
-          ./
+          -r --skip-git
       results-file-name:
         description: "File name of the result SARIF file"
         type: string
@@ -38,9 +36,7 @@ jobs:
         continue-on-error: false
         with:
           scan-args: |-
-            --format=json
-            --output=new-results.json
-            ${{ inputs.scan-args }}
+            --format=json --output=new-results.json ${{ inputs.scan-args }}
 
     permissions:
       # Require writing security events to upload SARIF file to security tab
