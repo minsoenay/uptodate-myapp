@@ -1,15 +1,24 @@
 name: OSV-Scanner PR Scan
 
-# Change "main" to your default branch if you use a different name, i.e. "master"
 on:
+  push:
+    branches: [ "master" ]
   pull_request:
-    branches: [ main ]
-  merge_group:
-    branches: [ main ]
+    branches: [ "master" ]
+
 
 # Declare default permissions as read only.
 permissions: read-all
 
 jobs:
-  scan-pr:
+  osv-scan:
     uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable-pr.yml@main"
+    with:
+      # Only scan the top level go.mod file without recursively scanning directories since
+      # this is pipeline is about releasing the go module and binary
+      scan-args: |-
+        --skip-git
+        ./
+    permissions:
+      # Require writing security events to upload SARIF file to security tab
+      security-events: write
