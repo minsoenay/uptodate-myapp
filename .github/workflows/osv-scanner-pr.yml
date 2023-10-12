@@ -3,6 +3,7 @@ name: OSV-Scanner PR scanning reusable
 permissions:
   contents: read
   security-events: write
+  issues: write
 
 on:
   workflow_dispatch:
@@ -33,7 +34,6 @@ jobs:
         with:
           scan-args: |-
             --format=json --output=old-results.json
-            ${{ inputs.scan-args }}
       - name: "Checkout current branch"
         run: git checkout $GITHUB_SHA
       - name: "Run scanner on new code"
@@ -41,7 +41,6 @@ jobs:
         with:
           scan-args: |-
             --format=json --output=new-results.json
-            ${{ inputs.scan-args }}
         continue-on-error: false
       # - name: "Run osv-scanner-reporter"
       #   uses: google/osv-scanner/actions/reporter@main
