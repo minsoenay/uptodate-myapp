@@ -28,32 +28,32 @@ jobs:
           # Do persist credentials, as we need it for the git checkout later
       - name: "Checkout target branch"
         run: git checkout $GITHUB_BASE_REF
+
       - name: "Run scanner on existing code"
         uses: google/osv-scanner/actions/scanner@main
         continue-on-error: false
         with:
-          scan-args: 
-            --format json old-results.json
-            
+          scan-args: --output=old-results.json
+
       - name: "Checkout current branch"
         run: git checkout $GITHUB_SHA
       - name: "Run scanner on new code"
         uses: google/osv-scanner/actions/scanner@main
         with:
-          scan-args: 
-            --format json new-results.json
+          scan-args: --output=new-results.json
         continue-on-error: false
         
-      # - name: "Run osv-scanner-reporter"
-      #   uses: google/osv-scanner/actions/reporter@main
-      #   with:
-      #     scan-args: |-
-      #       --output=${{ inputs.results-file-name }}
-      #       --old=old-results.json
-      #       --new=new-results.json
-      #       --gh-annotations=true
-      # # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
-      # # format to the repository Actions tab.
+      - name: "Run osv-scanner-reporter"
+        uses: google/osv-scanner/actions/reporter@main
+        with:
+          scan-args: |-
+            --output=${{ inputs.results-file-name }}
+            --old=old-results.json
+            --new=new-results.json
+            --gh-annotations=true
+            
+      # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
+      # format to the repository Actions tab.
       # - name: "Upload artifact"
       #   if: '!cancelled()'
       #   uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
