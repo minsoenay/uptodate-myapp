@@ -49,7 +49,7 @@ jobs:
         uses: google/osv-scanner/actions/scanner@main
         with:
           scan-args: 
-            --format=json
+            --experimental-call-analysis
             --output=new-results.json
         continue-on-error: true
         
@@ -57,9 +57,10 @@ jobs:
         uses: google/osv-scanner/actions/reporter@main
         with:
           scan-args: 
-            --output=results.sarif
+            --experimental-call-analysis
             --old=old-results.json
             --new=new-results.json
+            --output=results.sarif
             --gh-annotations=true
 
       # # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
