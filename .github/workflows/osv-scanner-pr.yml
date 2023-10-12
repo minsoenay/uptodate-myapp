@@ -6,9 +6,9 @@ permissions:
  
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
   workflow_dispatch:
 
@@ -28,6 +28,9 @@ jobs:
   scan-pr:
     runs-on: ubuntu-latest
     steps:
+      # check out
+      - uses: actions/checkout@v3
+      
       - name: "Run scanner on main branch"
         uses: google/osv-scanner/actions/scanner@main
         with:
