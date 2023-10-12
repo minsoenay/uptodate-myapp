@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@4 # v4.1.0
  
       - name: "Run scanner on existing code"
-        uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable-pr.yml@main"
+        uses: google/osv-scanner/actions/scanner@main
         continue-on-error: false
         with:
           scan-args: |-
