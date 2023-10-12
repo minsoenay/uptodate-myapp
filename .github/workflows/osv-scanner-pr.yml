@@ -28,15 +28,12 @@ jobs:
   scan-pr:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout target branch"
-        uses: actions/checkout@v3
- 
-      - name: "Run scanner on existing code"
+      - name: "Run scanner on main branch"
         uses: google/osv-scanner/actions/scanner@main
-        continue-on-error: false
         with:
           scan-args: |-
-            --format=json --output=new-results.json ${{ inputs.scan-args }}
+            --format=json --output=new-results.json
+        continue-on-error: false
 
     permissions:
       # Require writing security events to upload SARIF file to security tab
