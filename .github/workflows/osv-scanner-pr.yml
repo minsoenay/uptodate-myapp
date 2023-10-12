@@ -24,30 +24,6 @@ jobs:
   scan-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4 # v4.1.0
-        with:
-          fetch-depth: 0
-          # Do persist credentials, as we need it for the git checkout later
-      - name: "Checkout target branch"
-        run: git checkout $GITHUB_BASE_REF
-      - name: "Run scanner on existing code"
-        uses: google/osv-scanner/actions/scanner@main
-        continue-on-error: true
-        with:
-          scan-args: |-
-            --format=json
-            --output=old-results.json
-            ${{ inputs.scan-args }}
-      - name: "Checkout current branch"
-        run: git checkout $GITHUB_SHA
-      - name: "Run scanner on new code"
-        uses: google/osv-scanner/actions/scanner@main
-        with:
-          scan-args: |-
-            --format=json
-            --output=new-results.json
-            ${{ inputs.scan-args }}
-        continue-on-error: true
       - name: "Run osv-scanner-reporter"
         uses: google/osv-scanner/actions/reporter@main
         with:
@@ -57,30 +33,25 @@ jobs:
             --gh-annotations=true
       # Upload the results as artifacts (optional). Commenting out will disable uploads of run results in SARIF
       # format to the repository Actions tab.
-      # - name: "Upload artifact"
-      #   if: '!cancelled()'
-      #   uses: actions/upload-artifact@v3 # v3.1.3
-      #   with:
-      #     name: SARIF file
-      #     path: ${{ inputs.results-file-name }}
-      #     retention-days: 5
-      # - name: "Upload old scan json results"
-      #   if: '!cancelled()'
-      #   uses: actions/upload-artifact@v3 # v3.1.3
-      #   with:
-      #     name: old-json-results
-      #     path: old-results.json
-      #     retention-days: 5
-      # - name: "Upload new scan json results"
-      #   if: '!cancelled()'
-      #   uses: actions/upload-artifact@v3 # v3.1.3
-      #   with:
-      #     name: new-json-results
-      #     path: new-results.json
-      #     retention-days: 5
-      # # Upload the results to GitHub's code scanning dashboard.
-      # - name: "Upload to code-scanning"
-        # if: '!cancelled()'
-        # uses: github/codeql-action/upload-sarif@2cb752a87e96af96708ab57187ab6372ee1973ab # v2.22.0
-        # with:
-        #   sarif_file: ${{ inputs.results-file-name }}
+      - name: "Upload artifact"
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v3 # v3.1.3
+        with:
+          name: SARIF file
+          path: ${{ inputs.results-file-name }}
+          retention-days: 5
+          
+      - name: "Upload new scan json results"
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v3 # v3.1.3
+        with:
+          name: new-json-results
+          path: new-results.json
+          retention-days: 5
+
+      # Upload the results to GitHub's code scanning dashboard.
+      - name: "Upload to code-scanning"
+        if: '!cancelled()'
+        uses: github/codeql-action/upload-sarif@2cb752a87e96af96708ab57187ab6372ee1973ab # v2.22.0
+        with:
+          sarif_file: ${{ inputs.results-file-name }}
